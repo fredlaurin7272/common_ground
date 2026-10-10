@@ -1,0 +1,456 @@
+<title>Common Ground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one calm column, one screen at a time — a phone passed between two people */
+:root {
+  --bg: #EEF2F4; --surface: #FFFFFF; --ink: #18242C; --muted: #5B6B75; --line: #D5DEE3;
+  --accent: #1D6B6A; --accent-ink: #FFFFFF; --soft: #DCEBEA;
+  --a: #2F64B0; --b: #9A4E8C; --warn: #9A5A0C; --warn-soft: #F7E9D4; --danger: #A23B3B;
+  --display: "Young Serif", Georgia, "Times New Roman", serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F171C; --surface: #17222A; --ink: #E6EDF0; --muted: #93A4AE; --line: #26343D;
+  --accent: #5CC2BC; --accent-ink: #0B1A1A; --soft: #1C3434;
+  --a: #86AEEB; --b: #D99BCE; --warn: #E8AC5E; --warn-soft: #33281A; --danger: #E58585; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0F171C; --surface: #17222A; --ink: #E6EDF0; --muted: #93A4AE; --line: #26343D;
+  --accent: #5CC2BC; --accent-ink: #0B1A1A; --soft: #1C3434;
+  --a: #86AEEB; --b: #D99BCE; --warn: #E8AC5E; --warn-soft: #33281A; --danger: #E58585; color-scheme: dark }
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 520px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: flex; flex-direction: column; gap: 18px; }
+h1, h2 { font-family: var(--display); font-weight: 400; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: 2.1rem; }
+h2 { font-size: 1.55rem; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: .9rem; }
+.eyebrow { font-size: .75rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.row > * { flex: 1 1 140px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+label { font-weight: 600; font-size: .95rem; }
+input[type=text], textarea { width: 100%; box-sizing: border-box; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+textarea { min-height: 120px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button { font: inherit; font-weight: 600; border-radius: 999px; padding: 12px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+button.ghost { background: transparent; border-color: transparent; color: var(--muted); text-decoration: underline; padding-inline: 4px; }
+button:disabled { opacity: .45; cursor: default; }
+.choice { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.choice button, .seg button { border-radius: 10px; padding: 10px 4px; font-size: .9rem; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.on { background: var(--soft) !important; border-color: var(--accent) !important; color: var(--ink) !important; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.a { color: var(--a); } .b { color: var(--b); }
+.bg-a { background: var(--a); } .bg-b { background: var(--b); }
+.note { background: var(--warn-soft); color: var(--ink); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+.privacy { font-size: .85rem; color: var(--muted); display: flex; gap: 8px; align-items: flex-start; }
+
+/* Session */
+.speaker { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.listen { display: flex; align-items: center; gap: 10px; }
+.wave { display: flex; gap: 3px; align-items: center; height: 22px; }
+.wave i { width: 4px; border-radius: 2px; background: var(--accent); height: 30%; animation: w 1.2s ease-in-out infinite; }
+.wave i:nth-child(2){animation-delay:.15s}.wave i:nth-child(3){animation-delay:.3s}.wave i:nth-child(4){animation-delay:.45s}.wave i:nth-child(5){animation-delay:.6s}
+@keyframes w { 0%,100%{height:25%} 50%{height:95%} }
+.timer { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.1rem; }
+.timer.over { color: var(--warn); }
+.log { display: flex; flex-direction: column; gap: 10px; max-height: 38vh; overflow-y: auto; }
+.turn { border-left: 3px solid var(--line); padding: 2px 0 2px 12px; min-width: 0; overflow-wrap: anywhere; }
+.turn.ta { border-color: var(--a); } .turn.tb { border-color: var(--b); }
+.turn .who { font-size: .8rem; font-weight: 700; }
+.turn.flag { background: var(--warn-soft); border-radius: 0 8px 8px 0; }
+
+/* Overlay */
+.overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px 20px; max-width: 420px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; text-align: center; }
+.breath { width: 120px; height: 120px; margin: 4px auto; border-radius: 50%; background: var(--soft); border: 2px solid var(--accent); animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { transform: scale(.6); } 50% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .breath, .wave i { animation: none; } }
+
+/* Summary */
+.who-card h3 { margin: 0; font-size: 1.05rem; }
+ul.clean { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+.opt { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.opt:first-of-type { border-top: 0; padding-top: 0; }
+.opt .agree { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt .agree button { padding: 8px 14px; font-size: .9rem; }
+.agreed { color: var(--accent); font-weight: 700; font-size: .85rem; }
+.thinking { display: flex; align-items: center; gap: 12px; }
+.spin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--accent); animation: sp 1s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+</style>
+
+<div class="wrap" id="app" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+  const app = document.getElementById("app");
+  const TURN_SECONDS = 120;
+  const MAX_INTERVENTIONS = 2;
+
+  let S = fresh();
+  function fresh() {
+    return { screen: "welcome", a: "", b: "", topic: "", checkIdx: 0, checks: [], turns: [], speaker: 0,
+      interventions: 0, lastInterventionTurn: -10, summary: null, agree: {}, custom: [], example: false };
+  }
+
+  // ---------- helpers ----------
+  function el(tag, attrs, ...kids) {
+    const n = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      const v = attrs[k];
+      if (k === "class") n.className = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else if (k === "text") n.textContent = v;
+      else if (v === true) n.setAttribute(k, "");
+      else if (v !== false && v != null) n.setAttribute(k, v);
+    }
+    for (const c of kids.flat()) if (c != null && c !== false) n.append(c.nodeType ? c : document.createTextNode(String(c)));
+    return n;
+  }
+  const name = i => (i === 0 ? S.a : S.b) || (i === 0 ? "Partner A" : "Partner B");
+  const cls = i => (i === 0 ? "a" : "b");
+  let tick = null;
+  function stopTick() { if (tick) { clearInterval(tick); tick = null; } }
+  function go(screen) { stopTick(); S.screen = screen; render(); window.scrollTo(0, 0); }
+
+  // Escalation signals from words: shouting, absolutes, insults, sarcasm.
+  function heat(text) {
+    let s = 0;
+    const words = text.match(/[A-Za-z']+/g) || [];
+    const caps = words.filter(w => w.length > 2 && w === w.toUpperCase()).length;
+    if (words.length > 3 && caps / words.length > 0.3) s += 2;
+    if (/!{2,}/.test(text)) s += 1;
+    s += Math.min((text.match(/\b(always|never|every time|nothing|everything)\b/gi) || []).length, 2);
+    if (/\b(stupid|idiot|ridiculous|pathetic|shut up|useless|crazy|selfish|lazy|hate|whatever)\b/i.test(text)) s += 2;
+    if (/\b(yeah right|oh great|typical|of course you)\b/i.test(text)) s += 1;
+    return s;
+  }
+
+  // ---------- screens ----------
+  function render() {
+    app.replaceChildren();
+    const f = { welcome, handoff, checkin, unsure, stop, session, summary, agreement }[S.screen];
+    f();
+  }
+
+  function welcome() {
+    const aIn = el("input", { type: "text", id: "nameA", placeholder: "e.g. Alex", value: S.a, autocomplete: "off" });
+    const bIn = el("input", { type: "text", id: "nameB", placeholder: "e.g. Sam", value: S.b, autocomplete: "off" });
+    const tIn = el("input", { type: "text", id: "topic", placeholder: "e.g. How we split weekends", value: S.topic, autocomplete: "off" });
+    const start = el("button", { class: "primary", onclick: () => {
+      S.a = aIn.value.trim(); S.b = bIn.value.trim(); S.topic = tIn.value.trim();
+      S.checkIdx = 0; S.checks = []; go("handoff");
+    } }, "Start a conversation");
+    const check = () => { start.disabled = !(aIn.value.trim() && bIn.value.trim()); };
+    aIn.oninput = bIn.oninput = check; check();
+
+    app.append(
+      el("div", { class: "stack" },
+        el("span", { class: "eyebrow" }, "Prototype · for couples"),
+        el("h1", null, "Common Ground"),
+        el("p", { class: "muted" }, "Talk it through out loud, one at a time. The app stays quiet, steps in only if things heat up, and helps you find what you agree on at the end.")),
+      el("div", { class: "panel" },
+        el("div", { class: "row" },
+          el("div", { class: "stack" }, el("label", { for: "nameA" }, el("span", { class: "dot bg-a" }), " First person"), aIn),
+          el("div", { class: "stack" }, el("label", { for: "nameB" }, el("span", { class: "dot bg-b" }), " Second person"), bIn)),
+        el("div", { class: "stack" }, el("label", { for: "topic" }, "What's it about? ", el("span", { class: "muted small" }, "(optional)")), tIn),
+        start),
+      el("button", { onclick: loadExample }, "Try it with an example couple"),
+      el("p", { class: "privacy" }, "🔒", el("span", null, "Nothing is saved. Closing this page erases the conversation. Not a substitute for therapy.")));
+  }
+
+  function handoff() {
+    const i = S.checkIdx;
+    app.append(
+      el("div", { class: "stack" },
+        el("span", { class: "eyebrow" }, `Private check-in ${i + 1} of 2`),
+        el("h2", null, `Hand the phone to `, el("span", { class: cls(i) }, name(i)), "."),
+        el("p", { class: "muted" }, `${name(1 - i)}, please look away for a moment. Answers here are private and are never shown to the other person.`)),
+      el("button", { class: "primary", onclick: () => go("checkin") }, `I'm ${name(i)}, continue`));
+  }
+
+  function checkin() {
+    const i = S.checkIdx;
+    let feel = 0, safe = "";
+    const feelings = ["Calm", "Okay", "Tense", "Upset", "Very upset"];
+    const next = el("button", { class: "primary", disabled: true }, "Done");
+    const update = () => { next.disabled = !(feel && safe); };
+    const fb = feelings.map((t, k) => el("button", { onclick: e => { feel = k + 1; fb.forEach(x => x.classList.remove("on")); e.currentTarget.classList.add("on"); update(); } }, t));
+    const sOpts = [["yes", "Yes"], ["unsure", "Not sure"], ["no", "No"]];
+    const sb = sOpts.map(([v, t]) => el("button", { onclick: e => { safe = v; sb.forEach(x => x.classList.remove("on")); e.currentTarget.classList.add("on"); update(); } }, t));
+    next.onclick = () => {
+      S.checks[i] = { feel, safe };
+      if (i === 0) { S.checkIdx = 1; go("handoff"); return; }
+      if (S.checks.some(c => c.safe === "no")) return go("stop");
+      if (S.checks.some(c => c.safe === "unsure") || S.checks.every(c => c.feel >= 4)) return go("unsure");
+      startSession();
+    };
+    app.append(
+      el("div", { class: "stack" }, el("span", { class: "eyebrow" }, `Private · ${name(i)}`), el("h2", null, "Before you start")),
+      el("div", { class: "panel" },
+        el("label", null, "How are you feeling right now?"), el("div", { class: "choice" }, fb)),
+      el("div", { class: "panel" },
+        el("label", null, "Do you feel safe having this conversation together?"), el("div", { class: "seg" }, sb),
+        el("p", { class: "muted small" }, "If you answer No, the session ends without saying who answered.")),
+      next);
+  }
+
+  function unsure() {
+    const bothUpset = S.checks.every(c => c.feel >= 4);
+    app.append(
+      el("div", { class: "stack" },
+        el("span", { class: "eyebrow" }, "Before you begin"),
+        el("h2", null, bothUpset ? "You're both quite upset right now" : "One of you isn't sure this is a good time"),
+        el("p", { class: "muted" }, "Hard conversations go better once your bodies have calmed down. Waiting 20 minutes or picking another time is a good choice, not a failure.")),
+      el("button", { class: "primary", onclick: () => go("welcome") }, "Not now, try later"),
+      el("button", { onclick: startSession }, "Continue carefully"));
+  }
+
+  function stop() {
+    app.append(
+      el("div", { class: "stack" },
+        el("span", { class: "eyebrow" }, "Session ended"),
+        el("h2", null, "Let's not continue together today"),
+        el("p", null, "This tool is only for conversations where both people feel safe. Talking with a counselor, a trusted person, or a local support line can help more than an app here."),
+        el("p", { class: "muted small" }, "Nothing from this session was saved.")),
+      el("button", { onclick: () => { S = fresh(); go("welcome"); } }, "Back to start"));
+  }
+
+  function startSession() { S.turns = []; S.speaker = 0; S.interventions = 0; S.lastInterventionTurn = -10; go("session"); }
+
+  function session() {
+    const i = S.speaker;
+    let left = TURN_SECONDS;
+    const timer = el("span", { class: "timer", "aria-label": "Time left in this turn" }, "2:00");
+    const box = el("textarea", { id: "said", placeholder: `${name(i)}, say what's on your mind…` });
+    const done = el("button", { class: "primary", disabled: true }, `Done, ${name(1 - i)}'s turn`);
+    box.oninput = () => { done.disabled = !box.value.trim(); };
+
+    const log = el("div", { class: "log" }, S.turns.length ? S.turns.map(t =>
+      el("div", { class: `turn t${cls(t.who)}${t.flag ? " flag" : ""}` },
+        el("div", { class: `who ${cls(t.who)}` }, name(t.who)), el("div", null, t.text))) :
+      el("p", { class: "muted small" }, `${name(0)} starts. Take turns: one person talks, the other just listens.`));
+
+    done.onclick = () => {
+      const text = box.value.trim(); if (!text) return;
+      const h = heat(text);
+      const turn = { who: i, text, flag: false };
+      S.turns.push(turn);
+      S.speaker = 1 - i;
+      const n = S.turns.length;
+      if (h >= 3 && S.interventions < MAX_INTERVENTIONS && n - S.lastInterventionTurn > 2) {
+        turn.flag = true; S.interventions++; S.lastInterventionTurn = n;
+        render(); showPause(true);
+      } else go("session");
+    };
+
+    app.append(
+      el("div", { class: "speaker" },
+        el("div", { class: "stack", style: "gap:2px" },
+          el("span", { class: "eyebrow" }, S.topic || "Your conversation"),
+          el("h2", null, el("span", { class: cls(i) }, name(i)), " is talking")),
+        el("div", { class: "listen" }, el("div", { class: "wave", "aria-hidden": "true" }, el("i"), el("i"), el("i"), el("i"), el("i")), timer)),
+      el("div", { class: "panel" },
+        el("label", { for: "said" }, "What you're saying"),
+        box,
+        el("p", { class: "muted small" }, "🎙️ Tap the microphone on your keyboard to speak instead of typing. The full app will listen on its own."),
+        done),
+      el("div", { class: "row" },
+        el("button", { onclick: () => showPause(false) }, "⏸ Pause"),
+        el("button", { disabled: S.turns.length < 2, onclick: () => go("summary") }, "We're done talking")),
+      S.turns.length ? el("span", { class: "eyebrow" }, "So far") : null,
+      log);
+    log.scrollTop = log.scrollHeight;
+
+    tick = setInterval(() => {
+      left--;
+      const m = Math.floor(Math.abs(left) / 60), s = String(Math.abs(left) % 60).padStart(2, "0");
+      timer.textContent = (left < 0 ? "+" : "") + m + ":" + s;
+      timer.classList.toggle("over", left < 0);
+    }, 1000);
+  }
+
+  function showPause(fromApp) {
+    stopTick();
+    let breathTimer = null;
+    const body = el("div", { class: "stack" });
+    const close = () => { if (breathTimer) clearInterval(breathTimer); ov.remove(); go("session"); };
+    function main() {
+      body.replaceChildren(
+        el("h2", null, fromApp ? "Let's slow down for a moment" : "Paused"),
+        el("p", { class: "muted" }, fromApp
+          ? "It sounds like things are getting heated. That's normal in a hard conversation. A short pause usually helps you both be heard."
+          : "Take whatever time you need. Nothing is lost while you're paused."),
+        el("button", { class: "primary", onclick: breathe }, "Breathe together for 1 minute"),
+        el("button", { onclick: longBreak }, "Take a 20-minute break"),
+        el("button", { class: "ghost", onclick: close }, fromApp ? "Keep going" : "Resume"));
+    }
+    function countdown(secs, title, sub) {
+      const t = el("div", { class: "timer" });
+      const fmt = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+      t.textContent = fmt(secs);
+      body.replaceChildren(el("h2", null, title), el("div", { class: "breath", "aria-hidden": "true" }), el("p", { class: "muted" }, sub), t,
+        el("button", { class: "primary", onclick: close }, "Resume the conversation"));
+      breathTimer = setInterval(() => { secs--; t.textContent = fmt(Math.max(secs, 0)); if (secs <= 0) { clearInterval(breathTimer); t.textContent = "Ready when you are"; } }, 1000);
+    }
+    function breathe() { countdown(60, "Breathe in as the circle grows", "Out as it shrinks. Both of you, together."); }
+    function longBreak() { countdown(1200, "Taking a break", "Step away, get some water, do something calming. Come back when the timer ends, or sooner if you're both ready."); }
+    main();
+    const ov = el("div", { class: "overlay", role: "dialog", "aria-modal": "true" }, el("div", { class: "card" }, body));
+    document.body.append(ov);
+  }
+
+  // ---------- AI summary ----------
+  function transcript() { return S.turns.map(t => `${name(t.who)}: ${t.text}`).join("\n"); }
+  function prompt() {
+    return `You are a neutral relationship mediator helping a couple, ${name(0)} and ${name(1)}, after a conversation${S.topic ? " about: " + S.topic : ""}.
+Never judge who is right, assign blame, score them, or give a verdict. Use warm, plain, everyday language and their names.
+Reply with only this JSON:
+{"safety_concern": boolean, "safety_note": string,
+ "a": {"view": string, "needs": [string]},
+ "b": {"view": string, "needs": [string]},
+ "common_ground": [string],
+ "core_difference": string,
+ "options": [{"title": string, "detail": string}],
+ "reflection": string}
+"a" is ${name(0)}, "b" is ${name(1)}. "view": 2 sentences describing their position the way they would recognize it. "needs": up to 3 short phrases naming the need underneath (e.g. "to feel appreciated"). "common_ground": 2-4 short points they already share. "core_difference": one sentence, neutral. "options": exactly 3 concrete, small things to try that serve BOTH people's needs; title under 8 words, detail one sentence. "reflection": one encouraging sentence that takes no side.
+Set "safety_concern" true only if the transcript shows threats, fear, coercion, intimidation or violence; then "safety_note" gently says a professional should help and the options should be empty. Otherwise "safety_note" is "".
+
+Transcript:
+${transcript().slice(0, 20000)}`;
+  }
+
+  let ctl = null;
+  async function summary() {
+    const holder = el("div", { class: "stack" });
+    app.append(
+      el("div", { class: "stack" }, el("span", { class: "eyebrow" }, "After the conversation"), el("h2", null, "What each of you was saying")),
+      holder);
+    if (S.summary) return drawSummary(holder);
+
+    const stopBtn = el("button", { class: "ghost" }, "Stop");
+    holder.append(el("div", { class: "panel" },
+      el("div", { class: "thinking" }, el("div", { class: "spin" }), el("span", null, "Listening back to your conversation…")),
+      el("p", { class: "muted small" }, "This usually takes under a minute. If you're asked to allow Claude, that's what writes the summary."),
+      stopBtn));
+
+    const sample = await (window.claude ? window.claude.use("sample") : Promise.resolve(null)).catch(() => null);
+    if (!sample) return failed(holder, "The AI summary isn't available in this view. Open the page inside the Claude app to try it.");
+    ctl = new AbortController();
+    stopBtn.onclick = () => ctl.abort();
+    try {
+      const data = await sample.json(prompt(), { signal: ctl.signal, cache: false });
+      if (!data || !data.a || !data.b) throw { code: "invalid_json" };
+      S.summary = data; S.agree = {}; S.custom = [];
+      holder.replaceChildren(); drawSummary(holder);
+    } catch (e) {
+      const msg = {
+        cancelled: "Stopped.",
+        not_granted: "The summary needs permission to use Claude. Reload the page to be asked again.",
+        rate_limited: "Too many requests right now. Wait a minute, then try again.",
+        invalid_json: "The summary came back in an unexpected form.",
+      }[e && e.code] || "Something went wrong while writing the summary.";
+      failed(holder, msg);
+    }
+  }
+  function failed(holder, msg) {
+    holder.replaceChildren(
+      el("div", { class: "note" }, msg),
+      el("button", { class: "primary", onclick: () => go("summary") }, "Try again"),
+      el("button", { onclick: () => go("session") }, "Back to the conversation"));
+  }
+
+  function drawSummary(holder) {
+    const d = S.summary;
+    if (d.safety_concern) {
+      holder.append(el("div", { class: "panel" },
+        el("h3", { style: "margin:0" }, "This one needs more than an app"),
+        el("p", null, d.safety_note || "Parts of this conversation suggest someone may not feel safe. Please talk with a counselor or a local support line."),
+        el("button", { onclick: () => { S = fresh(); go("welcome"); } }, "End and erase")));
+      return;
+    }
+    const person = (i, p) => el("div", { class: "panel who-card", style: `border-left:4px solid var(--${cls(i)})` },
+      el("h3", { class: cls(i) }, name(i)),
+      el("p", null, p.view || ""),
+      (p.needs && p.needs.length) ? el("div", { class: "stack", style: "gap:4px" }, el("span", { class: "eyebrow" }, "What matters underneath"),
+        el("ul", { class: "clean" }, p.needs.map(n => el("li", null, n)))) : null);
+    holder.append(
+      person(0, d.a), person(1, d.b),
+      el("div", { class: "panel" },
+        el("span", { class: "eyebrow" }, "Where you already agree"),
+        el("ul", { class: "clean" }, (d.common_ground || []).map(x => el("li", null, x))),
+        d.core_difference ? el("p", { class: "muted" }, el("strong", null, "Where you differ: "), d.core_difference) : null),
+      d.reflection ? el("p", { style: "font-family:var(--display);font-size:1.15rem;text-wrap:balance" }, d.reflection) : null,
+      el("button", { class: "primary", onclick: () => go("agreement") }, "Choose what to try"),
+      el("button", { class: "ghost", onclick: () => go("session") }, "Keep talking first"));
+  }
+
+  // ---------- agreement ----------
+  function agreement() {
+    const opts = [...(S.summary.options || []), ...S.custom];
+    const list = el("div", { class: "panel" });
+    opts.forEach((o, k) => {
+      const st = S.agree[k] || (S.agree[k] = [false, false]);
+      const both = st[0] && st[1];
+      const btn = i => el("button", { class: st[i] ? "on" : "", "aria-pressed": String(st[i]), onclick: () => { st[i] = !st[i]; render(); } },
+        el("span", { class: `dot bg-${cls(i)}` }), " ", name(i), st[i] ? " ✓" : "");
+      list.append(el("div", { class: "opt" },
+        el("strong", null, o.title), o.detail ? el("span", { class: "muted small" }, o.detail) : null,
+        el("div", { class: "agree" }, btn(0), btn(1)),
+        both ? el("span", { class: "agreed" }, "You both agreed") : null));
+    });
+    const own = el("input", { type: "text", id: "own", placeholder: "Add your own idea…", autocomplete: "off" });
+    const add = el("button", { onclick: () => { const v = own.value.trim(); if (v) { S.custom.push({ title: v, detail: "" }); render(); } } }, "Add");
+
+    const agreed = opts.filter((o, k) => S.agree[k] && S.agree[k][0] && S.agree[k][1]);
+    const check = new Date(Date.now() + 14 * 864e5).toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+    const text = `Our agreement (${name(0)} & ${name(1)})${S.topic ? " — " + S.topic : ""}\n` +
+      agreed.map(o => "• " + o.title + (o.detail ? ": " + o.detail : "")).join("\n") + `\nCheck-in: ${check}`;
+    const copyBtn = el("button", { class: "primary" }, "Copy our agreement");
+    const pre = el("p", { style: "white-space:pre-wrap", id: "agreementText" }, text);
+    copyBtn.onclick = async () => {
+      try { await navigator.clipboard.writeText(text); copyBtn.textContent = "Copied"; }
+      catch { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = "Selected, copy it now"; }
+    };
+
+    app.append(
+      el("div", { class: "stack" }, el("span", { class: "eyebrow" }, "Next steps"), el("h2", null, "Pick what you'll both try"),
+        el("p", { class: "muted" }, "Each of you taps the ideas you're willing to try. Only ideas you both pick go into the agreement.")),
+      list,
+      el("div", { class: "row" }, own, el("div", { style: "flex:0 0 auto" }, add)),
+      agreed.length ? el("div", { class: "panel", style: "border-color:var(--accent)" },
+        el("span", { class: "eyebrow" }, "Your agreement"), pre,
+        el("p", { class: "muted small" }, "The full app will remind you both on the check-in date and ask how it's going."),
+        copyBtn) : el("p", { class: "muted small" }, "Nothing agreed yet. One shared step is enough to start."),
+      el("button", { class: "ghost", onclick: () => go("summary") }, "Back to the summary"),
+      el("button", { onclick: () => { S = fresh(); go("welcome"); } }, "Finish and erase everything"));
+  }
+
+  // ---------- example ----------
+  function loadExample() {
+    S = fresh();
+    S.a = "Alex"; S.b = "Sam"; S.topic = "Weekends with Sam's family"; S.example = true;
+    S.checks = [{ feel: 3, safe: "yes" }, { feel: 2, safe: "yes" }];
+    S.turns = [
+      { who: 0, text: "I feel like every other weekend is planned around your parents. I barely get time to rest, and when I bring it up it turns into a whole thing." },
+      { who: 1, text: "My parents are getting older and they live close. I want them to see us. I didn't realize it felt like that much to you." },
+      { who: 0, text: "It's not that I don't like them. I just work long weeks, and Saturday is the only day I can actually switch off." },
+      { who: 1, text: "And I feel guilty when we skip, because my mom always asks. I end up stuck in the middle." },
+    ];
+    S.speaker = 0;
+    go("session");
+  }
+
+  render();
+})();
+</script>
