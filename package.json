@@ -1,0 +1,11 @@
+{
+  "name": "common-ground",
+  "private": true,
+  "workspaces": ["app", "server", "shared"],
+  "scripts": {
+    "app": "npm run start --workspace app",
+    "server": "npm run dev --workspace server",
+    "test": "npm test --workspace shared --workspace server",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}
