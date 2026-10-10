@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { checkInOutcome, FEELINGS, SAFE_OPTIONS, type CheckIn, type Feeling, type SafeAnswer } from "@common-ground/shared";
+import { DEMO } from "../demo";
 import { exampleSession, startConversation, useSession } from "../session";
 import { fonts, useColors } from "../theme";
 import { Body, Button, Dot, Eyebrow, H1, H2, Label, Name, Panel, PrivacyNote, Row, Screen, Stack } from "../ui";
@@ -43,7 +44,7 @@ export function Welcome() {
   return (
     <Screen>
       <Stack>
-        <Eyebrow>Early version · for couples</Eyebrow>
+        <Eyebrow>{DEMO ? "Preview" : "Early version"} · for couples</Eyebrow>
         <H1>Common Ground</H1>
         <Body muted>
           Talk it through, one at a time. The app stays quiet, steps in only if things heat up, and helps you find what you agree on at the end.

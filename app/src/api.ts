@@ -2,6 +2,7 @@
 // The app never calls Anthropic directly.
 import Constants from "expo-constants";
 import { parseSummary, type Summary, type SummaryRequest } from "@common-ground/shared";
+import { DEMO, demoSummary } from "./demo";
 
 /**
  * Where the server is. Set EXPO_PUBLIC_SERVER_URL to override. Otherwise, during
@@ -23,6 +24,11 @@ export class SummaryFetchError extends Error {
 }
 
 export async function fetchSummary(req: SummaryRequest, signal: AbortSignal): Promise<Summary> {
+  if (DEMO) {
+    await new Promise(r => setTimeout(r, 1500));
+    if (signal.aborted) throw new SummaryFetchError("cancelled");
+    return demoSummary(req);
+  }
   let res: Response;
   try {
     res = await fetch(`${serverUrl()}/summary`, {

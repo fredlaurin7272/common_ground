@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { fetchSummary, SummaryFetchError, type SummaryFailure } from "../api";
+import { DEMO } from "../demo";
 import { useSession } from "../session";
 import { fonts, partnerColor, useColors } from "../theme";
 import { Body, Button, Eyebrow, H2, Note, Panel, Screen, Stack, Strong } from "../ui";
@@ -103,6 +104,7 @@ export function SummaryScreen() {
 
       {d && !d.safety_concern && (
         <>
+          {DEMO && <Note>Preview: this is a sample summary, not based on what you typed. The real app writes it from your conversation.</Note>}
           <PersonCard who={0} {...d.a} />
           <PersonCard who={1} {...d.b} />
           <Panel>

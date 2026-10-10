@@ -1,6 +1,6 @@
 // Each partner picks what they're willing to try. Only shared picks become the agreement.
 import { useState } from "react";
-import { Share, StyleSheet, View } from "react-native";
+import { Platform, Share, StyleSheet, View } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { agreedOptions, agreementText, checkInDate } from "@common-ground/shared";
 import { useSession } from "../session";
@@ -12,7 +12,7 @@ export function Agreement() {
   const { s, update, go, erase, name } = useSession();
   const c = useColors();
   const [own, setOwn] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<null | "copied" | "failed">(null);
   if (!s.summary || s.summary.safety_concern) return null;
 
   const options = [...s.summary.options, ...s.custom];
@@ -20,7 +20,7 @@ export function Agreement() {
     const current = s.picks[k] ?? [false, false];
     const next: [boolean, boolean] = who === 0 ? [!current[0], current[1]] : [current[0], !current[1]];
     update({ picks: { ...s.picks, [k]: next } });
-    setCopied(false);
+    setCopied(null);
   };
   const add = () => {
     const title = own.trim();
@@ -77,13 +77,13 @@ export function Agreement() {
           <Button
             kind="primary"
             onPress={async () => {
-              await Clipboard.setStringAsync(text);
-              setCopied(true);
+              const ok = await Clipboard.setStringAsync(text).catch(() => false);
+              setCopied(ok === false ? "failed" : "copied");
             }}
           >
-            {copied ? "Copied" : "Copy our agreement"}
+            {copied === "copied" ? "Copied" : copied === "failed" ? "Select the text above to copy it" : "Copy our agreement"}
           </Button>
-          <Button onPress={() => Share.share({ message: text }).catch(() => {})}>Share</Button>
+          {Platform.OS !== "web" && <Button onPress={() => Share.share({ message: text }).catch(() => {})}>Share</Button>}
         </Panel>
       ) : (
         <Body muted small>Nothing agreed yet. One shared step is enough to start.</Body>
